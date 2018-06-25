@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belly Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+          <div>
+            <nav class="navbar navbar-default">
+              <div class="container-fluid">
+                
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Belly Button Biodiversity</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="active"><a href="/names">Names<span class="sr-only">(current)</span></a></li>
+                    <li><a href="/otu">Otu Data</a></li>
+                    <li><a href="/metadata">Metadata</a></li>
+                    <li><a href="/wfreq">WFREG</a></li>
+                    <li><a href="/samples">Samples</a></li>
+                    
+                  </ul>
+
+                </div>
+              </div>
+            </nav>
+          </div>
+
+
+        <div class="row">
+          <div class="col-sm-12" style="text-align: center;background:purple; margin-bottom: 5%;color:white">
+            <h2>Belly Button BioDeversity</h2>
+            <hr>
+            <h2>Dashboard</h2>
+            <hr>
+            <h4>Use Interactive Charts to Explore Datasets</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt optio provident tempora amet, eveniet et, eum illum, culpa laborum dicta recusandae magni architecto. Illo saepe facilis, unde. Debitis, atque, doloremque?</p>
+          </div>
+          <div class="col-sm-4" style="border: blue">
+            <h3>Sample Meta Data</h3>
+            <ul> 
+                <li>Age:      </li> 
+                <li>BBtype:   </li> 
+                <li>Ethnicity: </li> 
+                <li>Gender:    </li>
+                <li>Location: </li> 
+                <li>SampleID:    </li>    
+            </ul>
+            
+          </div>
+          <div class="col-sm-3 col-md-4" style="color:blue">
+              <h2>Select Sample</h2>
+              <select id="selDataset" onchange="optionChanged(this.value)">
+              </select>
+              <div class="panel">
+                <h3 class="panel-title">Sample Meta Data</h3>
+              </div>
+              <div id="sample-metadata">
+
+              </div>
+          </div> 
+          
+          </div>
+    
+
+          <div id="plot"></div>
+
+
+          <div id="line"></div>
+          
+      </div>
+
+     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+     
+     
+     
+     <script>
+
+         Plotly.d3.json('/names',function(error, sample_names){
+             if (error) return console.warn(error);
+          var selector = document.getElementById("selDataset");
+            for (var i =0; i < sample_names.length; i++){
+                var currentSelection = document.createElement("option");
+                currentSelection.text = sample_names[i];
+                currentSelection.value = sample_names[i];
+                selector.appendChild(currentSelection);
+            }
+
+       Plotly.d3.json('/samples', function(error, otu_id_and_sample_values){
+             if (error) return console.warn(error);
+ 
+             var layout = { margin: { t: 0 } }
+             var LINE = document.getElementById('line');
+             Plotly.plot(LINE, otu_id_and_sample_values)
+         })
+     </script>
+</body>
+</html>
